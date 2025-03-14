@@ -1,10 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import axios from 'axios';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [result, setResult] = useState("");
+
+  const runTest = () => {
+    axios.post('http://localhost:8000/run-test')
+      .then(response => {
+        setResult(response.data.test_output);
+      })
+      .catch(error => {
+        setResult("Error running tests!");
+        console.error(error);
+      });
+  };
 
   return (
     <>
@@ -21,15 +34,20 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <p>Edit <code>src/App.jsx</code> and save to test HMR</p>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+
+      {/* New Section for Automation */}
+      <div className="p-4">
+        <h1>DhakAI Automation Dashboard</h1>
+        <button onClick={runTest}>Run Automation Tests</button>
+        <pre>{result}</pre>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
